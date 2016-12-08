@@ -16,19 +16,23 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
 
 using namespace std;
 
 class hashing
 {
 	private:
-    string jstring;
+		map<hashval_t,int> hashedValues;
 
 	public:
     //constructor
     hashing();
+		//reads in the lines of a file
+		void readLines(string filename);
     //returns the vector of values
     hashval_t hashFunction(string jstring);
-
+		//accesor for the map
+		map<hashval_t,int> getMap();
 };
 #endif

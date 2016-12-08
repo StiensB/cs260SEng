@@ -13,6 +13,7 @@
 #include "hashing.h"
 #include "hashtab.h"
 #include <string>
+#include <map>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -22,20 +23,54 @@ using namespace std;
 
   hashing::hashing()
   {
-    //string to be hashed
-    jstring = ("works & days");
+    map<hashval_t,int> hashedValues;
+
   }
 
-  hashval_t hashing::hashFunction(string jstring)
+  void hashing::readLines(string filename)
   {
+    //empty string to be filled with unhashed values
+    string toBeAdded = "";
+    //reads in file
+    ifstream infile;
+    infile.open(filename.c_str());
+
+    //while stuff is in there
+    while(infile.peek() && !infile.eof())
+    {
+      //string for each line to be added for hashing
+      string temp;
+      //line number
+      int x = 1;
+      x++;
+      //reads in 3 lines then adds them to be hashed
+      for (int n = 0; n <3; n++)
+      {
+        getline(infile,temp);
+        toBeAdded += temp;
+      }
+      std::pair<hashval_t,int>paired;
+      paired = make_pair(hashFunction(toBeAdded), x);
+      hashedValues.insert(paired);
+    }
+  }
+
+  hashval_t hashing::hashFunction(string toBeAdded)
+  {
+
+
     hashval_t hashed;
     hashed = 0;
-
-    for (int i = 0; jstring.size(); i++)
+    //actual hashing
+    for (int i = 0; i < toBeAdded.size(); i++)
     {
-      hashed = hashed^magicbits[jstring[i]][i];
+      hashed = hashed^magicbits[toBeAdded[i]][i];
     }
 
     return hashed;
+  }
 
+  map<hashval_t,int> hashing::getMap()
+  {
+    return hashedValues;
   }
